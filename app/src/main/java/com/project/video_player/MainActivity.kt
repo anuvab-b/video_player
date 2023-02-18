@@ -12,6 +12,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.project.video_player.databinding.ActivityMainBinding
+import android.widget.VideoView
+import android.widget.MediaController
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,19 +26,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        val videoView = findViewById<VideoView>(binding.testView.id)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+        //Creating MediaController
+        val mediaController = MediaController(this)
+        mediaController.setAnchorView(videoView)
 
         // Specify the location of the video file
-        val uri: Uri = parse("android.resource://$packageName/test")
+        val uri: Uri = parse("android.resource://$packageName/raw/test")
+
+        // Setting MediaController and URI, then starting the VideoView
+        videoView.setMediaController(mediaController)
+        videoView.setVideoURI(uri)
+        videoView.requestFocus()
+        videoView.start()
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
